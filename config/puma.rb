@@ -5,5 +5,5 @@ port ENV.fetch("PORT") { 3000 }
 environment ENV.fetch("RAILS_ENV") { "development" }
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 plugin :tmp_restart
-plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"] == "1"
 workers ENV.fetch("WEB_CONCURRENCY") { 0 }
