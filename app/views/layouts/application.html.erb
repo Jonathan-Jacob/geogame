@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex, nofollow, noarchive">
     <meta name="description" content="<%= t("app.tagline") %>">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <% share_image = URI.join(request.base_url, "/share.png").to_s %>
+    <meta property="og:url" content="<%= request.original_url %>">
     <meta property="og:title" content="GeoQuiz">
     <meta property="og:description" content="<%= t("app.tagline") %>">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="<%= share_image %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GeoQuiz">
+    <meta name="twitter:description" content="<%= t("app.tagline") %>">
+    <meta name="twitter:image" content="<%= share_image %>">
     <% if defined?(protect_against_forgery?) && protect_against_forgery? %>
     <meta name="csrf-param" content="<%= request_forgery_protection_token %>">
     <meta name="csrf-token" content="<%= form_authenticity_token %>">
