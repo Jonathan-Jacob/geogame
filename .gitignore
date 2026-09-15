@@ -15,3 +15,7 @@
 # Kamal — which builds from git — deploys with them. Regenerate anytime via:
 #   bin/rails shapes:build   (+ flag-icons copy, see vendor/README.md)
 !*/.keep
+
+# Ignore key files for decrypting credentials and more.
+/config/*.key
+
