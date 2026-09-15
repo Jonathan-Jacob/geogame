@@ -4,12 +4,18 @@ class QuizzesController < ApplicationController
   ROUNDS_PER_GAME = 10
 
   before_action :set_mode_level
+  before_action :disable_turbo_preview_cache, only: :show
 
   def show
-    reset_game_if_needed
+    if session.delete(:quiz_restart)
+      clear_finished_state_for_current_game
+      reset_game
+    else
+      reset_game_if_needed
+    end
     return if load_finished_state!
 
-    @country = current_country || pick_next_country
+    @country = pick_next_country
     session[:current_country_id] = @country.id
     @round = session[:quiz_round]
     @score = session[:quiz_score]
@@ -124,6 +130,15 @@ class QuizzesController < ApplicationController
     end
   end
 
+  def clear_finished_state_for_current_game
+    summary = session[:quiz_summary]
+    session.delete(:quiz_summary) if summary.is_a?(Hash) && summary["game_key"] == game_key
+  end
+
+  def disable_turbo_preview_cache
+    response.headers["Turbo-Cache-Control"] = "no-cache"
+  end
+
   def reset_game
     session[:game_key] = game_key
     session[:quiz_round] = 1
@@ -134,11 +149,12 @@ class QuizzesController < ApplicationController
     session.delete(:last_answer)
   end
 
-  def current_country
-    Country.find_by(id: session[:current_country_id]) if session[:current_country_id]
-  end
-
   def pick_next_country
+    if session[:current_country_id]
+      country = Country.find_by(id: session[:current_country_id])
+      return country if country
+    end
+
     seen = Array(session[:seen_ids])
     pool = Country.for_mode_level(@mode, @level).where.not(id: seen)
     pool = Country.for_mode_level(@mode, @level) if pool.none?
