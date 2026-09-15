@@ -26,9 +26,10 @@
           <%= t("app.name") %>
         <% end %>
         <div class="flex items-center gap-2">
-          <%= link_to t("nav.home"), localized_root_path(locale: I18n.locale),
-              class: "geo-pill px-3 py-1 text-sm rounded-full bg-white #{"is-active" if on_home}",
-              aria: { current: (on_home ? "page" : nil) } %>
+          <% unless on_home %>
+            <%= link_to t("nav.home"), localized_root_path(locale: I18n.locale),
+                class: "geo-pill px-3 py-1 text-sm rounded-full bg-white" %>
+          <% end %>
           <% other = I18n.locale == :de ? :en : :de %>
           <%= link_to other.to_s.upcase, url_for(locale: other), class: "geo-pill px-3 py-1 text-sm rounded-full bg-white" %>
         </div>
