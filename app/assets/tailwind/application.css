@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Rubik", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Gorditas", "Rubik", ui-sans-serif, system-ui, sans-serif;
+}

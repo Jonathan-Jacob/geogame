@@ -1,0 +1,17 @@
+/.bundle
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+/public/assets
+.byebug_history
+.env*
+!.env.example
+/vendor/geo/*.geojson
+!/vendor/README.md
+# NOTE: built shape/flag SVGs are intentionally TRACKED (not ignored) so that
+# Kamal — which builds from git — deploys with them. Regenerate anytime via:
+#   bin/rails shapes:build   (+ flag-icons copy, see vendor/README.md)
+!*/.keep

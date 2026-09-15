@@ -1,0 +1,35 @@
+service: geogame
+image: YOUR_DOCKERHUB_USER/geogame
+
+servers:
+  web:
+    hosts:
+      - YOUR_HETZNER_IP
+    options:
+      network: kamal
+
+proxy:
+  ssl: true
+  host: quiz.YOUR-DOMAIN.example
+  response_timeout: 30
+
+registry:
+  server: hub.docker.com
+  username:
+    - KAMAL_REGISTRY_USER
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - RAILS_MASTER_KEY
+  clear:
+    SOLID_QUEUE_IN_PUMA: 1
+
+volumes:
+  - geogame_storage:/rails/storage
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64

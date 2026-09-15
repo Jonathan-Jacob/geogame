@@ -1,0 +1,65 @@
+<div class="geo-quiz flex flex-col flex-1 min-h-0 justify-start gap-2">
+  <div class="flex items-center justify-between gap-2 shrink-0">
+    <div class="flex items-center gap-2 flex-wrap">
+      <%= level_badge(@level) %>
+      <span class="geo-chip"><%= t("quiz.round", current: @round, total: @total) %></span>
+    </div>
+    <span class="geo-chip"><%= t("quiz.score", score: @finished ? @final_score : @score) %></span>
+  </div>
+
+  <div class="geo-feedback-slot shrink-0" aria-live="polite">
+    <% if @last_result %>
+      <div class="geo-feedback <%= @last_result == 'correct' ? 'geo-feedback--ok' : 'geo-feedback--nope' %> rounded-lg">
+        <%= t("quiz.#{@last_result}", answer: @last_answer) %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="geo-quiz-panel rounded-2xl p-4 sm:p-5 flex flex-col gap-3 shrink-0<%= " geo-quiz-panel--finished" if @finished %>">
+    <% unless @finished %>
+      <h1 class="font-heading text-lg sm:text-xl text-center shrink-0">
+        <%= @mode == "shape" ? t("quiz.shape_question") : t("quiz.flag_question") %>
+      </h1>
+
+      <% if @country %>
+        <div class="quiz-prompt-stage shrink-0">
+          <% if @mode == "shape" %>
+            <%= shape_svg(@country) %>
+          <% else %>
+            <div class="quiz-flag">
+              <%= flag_svg(@country, css_class: "") %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if @finished %>
+      <div class="quiz-finished-content text-center shrink-0">
+        <div class="text-4xl mb-2"><%= finished_emoji(@final_score, @total) %></div>
+        <h2 class="font-heading text-2xl mb-2"><%= t("quiz.finished_title") %></h2>
+        <p class="text-indigo-900/80 mb-4"><%= finished_message(@final_score, @total) %></p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <%= link_to t("quiz.play_again"), quiz_reset_path(locale: I18n.locale, mode: @mode, level: @level), data: { turbo_method: :post }, class: "geo-btn-primary inline-block px-6 py-3 rounded-xl" %>
+          <%= link_to t("quiz.back_home"), localized_root_path(locale: I18n.locale), class: "geo-btn-secondary inline-block px-6 py-3 rounded-xl" %>
+        </div>
+      </div>
+    <% else %>
+      <%= form_with url: quiz_guess_path(mode: @mode, locale: I18n.locale, level: @level), method: :post,
+          data: { controller: "autocomplete", autocomplete_url_value: countries_json_path(locale: I18n.locale, mode: @mode, level: @level) },
+          class: "relative shrink-0" do %>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <div class="relative flex-1 min-w-0">
+            <%= text_field_tag :guess, "", data: { autocomplete_target: "input" }, autocomplete: "off",
+                enterkeyhint: "go",
+                placeholder: t("quiz.guess_placeholder", example: @mode == "shape" ? "Frankreich" : "Japan"),
+                class: "geo-input w-full rounded-xl px-4 py-3 text-lg font-medium bg-white" %>
+            <ul data-autocomplete-target="list" class="hidden absolute z-10 left-0 right-0 mt-1 bg-white border-2 border-indigo-950 rounded-xl shadow-[3px_3px_0_#1e1b4b] overflow-hidden max-h-48 overflow-y-auto"></ul>
+          </div>
+          <%= submit_tag t("quiz.submit"), class: "geo-btn-primary w-full sm:w-auto shrink-0 px-6 py-3 rounded-xl text-lg font-bold" %>
+        </div>
+        <p class="text-xs text-indigo-900/50 mt-1.5 text-center"><%= t("quiz.enter_hint") %></p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

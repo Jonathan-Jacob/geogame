@@ -1,0 +1,240 @@
+/*
+ * GeoQuiz — custom styles (Tailwind handles utilities)
+ * @font-face lives in layouts/_font_faces.html.erb (Propshaft asset_path)
+ */
+
+:root {
+  --font-body: "Rubik", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Gorditas", "Rubik", ui-sans-serif, system-ui, sans-serif;
+  --ink: #1e1b4b;
+  --card-border: 3px solid var(--ink);
+  --shadow-offset: 4px 4px 0 var(--ink);
+  --geo-bg-image:
+    radial-gradient(circle at 20% 80%, rgba(251, 146, 60, 0.35) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(96, 165, 250, 0.4) 0%, transparent 50%),
+    linear-gradient(135deg, #fef3c7 0%, #fde68a 40%, #bfdbfe 100%);
+}
+
+html {
+  background-color: #fde68a;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+a[href], button, [role="button"], summary, label[for] {
+  cursor: pointer;
+}
+
+input, textarea, select {
+  cursor: text;
+  font-family: var(--font-body);
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Wild gradient — fixed to viewport (overscroll / rubber-band safe) */
+.geo-bg {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.geo-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--geo-bg-image);
+  pointer-events: none;
+}
+
+/* Offset-shadow cards */
+.geo-card {
+  border: var(--card-border);
+  box-shadow: var(--shadow-offset);
+  background: white;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.geo-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.geo-card--shape {
+  --accent: #ea580c;
+}
+
+.geo-card--flag {
+  --accent: #4f46e5;
+}
+
+/* Difficulty pills */
+.geo-pill {
+  border: 2px solid var(--ink);
+  font-weight: 600;
+  transition: background 0.12s, transform 0.12s;
+}
+
+.geo-pill:hover {
+  transform: translateY(-1px);
+}
+
+.geo-pill.is-active {
+  background: var(--ink);
+  color: white;
+}
+
+/* Main — sit slightly above vertical center, don’t stretch children */
+.geo-main {
+  justify-content: flex-start;
+  padding-top: clamp(1rem, 8vh, 4rem);
+}
+
+.geo-quiz {
+  justify-content: flex-start;
+}
+
+/* Quiz panel — content-sized, no flex grow */
+.geo-quiz-panel {
+  border: var(--card-border);
+  box-shadow: var(--shadow-offset);
+  background: white;
+  flex: 0 0 auto;
+}
+
+/* Finished — match in-game panel height, content slightly above center */
+.geo-quiz-panel--finished {
+  min-height: calc(220px + 11rem);
+  min-height: calc(min(38vh, 260px) + 11rem);
+  justify-content: center;
+  padding-bottom: 2rem;
+}
+
+/* Reserve feedback height so the panel doesn’t jump between rounds */
+.geo-feedback-slot {
+  min-height: 2.75rem;
+}
+
+.geo-chip {
+  border: 2px solid var(--ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: white;
+}
+
+.geo-input {
+  border: var(--card-border);
+  box-shadow: 2px 2px 0 var(--ink);
+  font-family: var(--font-body);
+}
+
+.geo-input:focus {
+  outline: none;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.geo-btn-primary {
+  border: var(--card-border);
+  box-shadow: var(--shadow-offset);
+  background: #4f46e5;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.geo-btn-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.geo-btn-secondary {
+  border: var(--card-border);
+  box-shadow: 2px 2px 0 var(--ink);
+  background: #22c55e;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.geo-feedback {
+  border: 2px solid var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+}
+
+.geo-feedback--ok {
+  background: #bbf7d0;
+}
+
+.geo-feedback--nope {
+  background: #fde68a;
+}
+
+/* Shape/flag stage — block layout (nested flex + height:auto SVG/img => 0×0) */
+.quiz-prompt-stage {
+  min-height: 220px;
+  min-height: min(38vh, 260px);
+  padding: 0.25rem 0;
+}
+
+.country-shape-canvas {
+  width: 100%;
+  max-width: 28rem;
+  max-height: 260px;
+  max-height: min(38vh, 260px);
+  margin: 0 auto;
+}
+
+.country-shape-canvas svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.country-shape-canvas svg path {
+  fill: #fef08a;
+  stroke: var(--ink);
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.country-shape-missing {
+  width: 100%;
+  max-width: 28rem;
+  min-height: 220px;
+  margin: 0 auto;
+}
+
+.quiz-flag img {
+  display: block;
+  max-height: 260px;
+  max-height: min(38vh, 260px);
+  width: auto;
+  max-width: min(100%, 28rem);
+  margin: 0 auto;
+  border: var(--card-border);
+  box-shadow: var(--shadow-offset);
+  border-radius: 0.75rem;
+}
+
+svg text {
+  font-family: var(--font-body);
+}

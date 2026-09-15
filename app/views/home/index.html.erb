@@ -1,0 +1,37 @@
+<div class="flex flex-col flex-1 min-h-0 justify-start gap-5" data-controller="level-picker" data-level-picker-level-value="mixed">
+  <div class="text-center">
+    <h1 class="font-heading text-3xl sm:text-4xl mb-1"><%= t("home.title") %></h1>
+    <p class="text-indigo-900/80 text-sm sm:text-base"><%= t("home.subtitle") %></p>
+  </div>
+
+  <div class="flex justify-center gap-2 flex-wrap" role="group" aria-label="<%= t("home.difficulty_label") %>">
+    <% %w[easy medium hard mixed].each do |lvl| %>
+      <button type="button"
+        data-level-picker-target="pill"
+        data-level="<%= lvl %>"
+        data-action="click->level-picker#pick"
+        aria-pressed="<%= lvl == 'mixed' ? 'true' : 'false' %>"
+        class="geo-pill px-3 py-1.5 text-sm rounded-full bg-white <%= 'is-active' if lvl == 'mixed' %>">
+        <%= t("home.#{lvl}") %>
+      </button>
+    <% end %>
+  </div>
+
+  <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+    <%= link_to quiz_path(mode: "shape", locale: I18n.locale, level: "mixed"),
+        data: { level_picker_target: "link" },
+        class: "geo-card geo-card--shape rounded-2xl p-6 sm:p-8 text-center block -rotate-1 hover:rotate-0" do %>
+      <div class="text-5xl mb-2">🗺️</div>
+      <h2 class="font-heading text-2xl mb-1"><%= t("home.shape_card_title") %></h2>
+      <p class="text-sm text-indigo-900/70"><%= t("home.shape_card_text") %></p>
+    <% end %>
+
+    <%= link_to quiz_path(mode: "flag", locale: I18n.locale, level: "mixed"),
+        data: { level_picker_target: "link" },
+        class: "geo-card geo-card--flag rounded-2xl p-6 sm:p-8 text-center block rotate-1 hover:rotate-0" do %>
+      <div class="text-5xl mb-2">🏳️</div>
+      <h2 class="font-heading text-2xl mb-1"><%= t("home.flag_card_title") %></h2>
+      <p class="text-sm text-indigo-900/70"><%= t("home.flag_card_text") %></p>
+    <% end %>
+  </div>
+</div>

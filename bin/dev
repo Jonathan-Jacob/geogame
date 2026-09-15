@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if gem list --no-installed --exact --silent foreman; then
+  echo "Install foreman to run both processes:"
+  echo "  gem install foreman"
+  echo "Falling back to rails server only (run bin/rails tailwindcss:watch separately for CSS)."
+  exec ./bin/rails server "$@"
+else
+  exec foreman start -f Procfile.dev "$@"
+fi
