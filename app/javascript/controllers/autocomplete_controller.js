@@ -9,6 +9,7 @@ export default class extends Controller {
     this.filtered = []
     this.activeIndex = -1
     this.fetchCountries()
+    requestAnimationFrame(() => this.inputTarget.focus())
     this.inputTarget.addEventListener("input", () => this.onInput())
     this.inputTarget.addEventListener("keydown", (e) => this.onKeydown(e))
     document.addEventListener("click", (e) => {
