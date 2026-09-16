@@ -32,6 +32,7 @@ en:
     shape_question: "Which country has this shape?"
     flag_question: "Which country does this flag belong to?"
     correct: "Correct! That was %{answer}."
+    correct_twin: "Correct! That was actually %{actual}, but %{guessed} looks almost the same — we'll accept it."
     wrong: "Not quite — that was %{answer}."
     skipped: "Skipped — that was %{answer}."
     finished_title: "Game over!"

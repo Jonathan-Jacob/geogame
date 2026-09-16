@@ -9,8 +9,12 @@
 
   <div class="geo-feedback-slot shrink-0" aria-live="polite">
     <% if @last_result %>
-      <div class="geo-feedback <%= @last_result == 'correct' ? 'geo-feedback--ok' : 'geo-feedback--nope' %> rounded-lg">
-        <%= t("quiz.#{@last_result}", answer: @last_answer) %>
+      <div class="geo-feedback <%= %w[correct correct_twin].include?(@last_result) ? 'geo-feedback--ok' : 'geo-feedback--nope' %> rounded-lg">
+        <% if @last_result == "correct_twin" %>
+          <%= t("quiz.correct_twin", actual: @last_answer, guessed: @last_guess_name) %>
+        <% else %>
+          <%= t("quiz.#{@last_result}", answer: @last_answer) %>
+        <% end %>
       </div>
     <% end %>
   </div>

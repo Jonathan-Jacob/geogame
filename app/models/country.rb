@@ -1,6 +1,7 @@
 class Country < ApplicationRecord
   LEVELS = %w[easy medium hard].freeze
   MODES = %w[shape flag].freeze
+  FLAG_TWIN_ISO2 = { "MC" => "ID", "ID" => "MC" }.freeze
 
   validates :iso2, presence: true, uniqueness: true, length: { is: 2 }
   validates :iso3, presence: true, uniqueness: true, length: { is: 3 }
@@ -48,6 +49,25 @@ class Country < ApplicationRecord
     return false if normalized_guess.blank?
 
     all_names.any? { |n| self.class.normalize(n) == normalized_guess }
+  end
+
+  def flag_twin
+    twin_iso2 = FLAG_TWIN_ISO2[iso2]
+    Country.find_by(iso2: twin_iso2) if twin_iso2
+  end
+
+  # Returns [:correct|:twin_accepted|:wrong, matched_twin_or_nil]
+  def evaluate_guess(guess, mode, locale = I18n.locale)
+    if mode != "flag"
+      return matches_guess?(guess, locale) ? [ :correct, nil ] : [ :wrong, nil ]
+    end
+
+    return [ :correct, nil ] if matches_guess?(guess, locale)
+
+    twin = flag_twin
+    return [ :twin_accepted, twin ] if twin&.matches_guess?(guess, locale)
+
+    [ :wrong, nil ]
   end
 
   def self.normalize(str)

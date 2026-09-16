@@ -32,6 +32,7 @@ de:
     shape_question: "Welches Land hat diese Form?"
     flag_question: "Zu welchem Land gehört diese Flagge?"
     correct: "Richtig! Das war %{answer}."
+    correct_twin: "Richtig! Eigentlich war es %{actual}, aber %{guessed} sieht fast gleich aus — das zählt auch."
     wrong: "Nicht ganz — das war %{answer}."
     skipped: "Übersprungen — das war %{answer}."
     finished_title: "Spiel vorbei!"

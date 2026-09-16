@@ -22,6 +22,7 @@ class QuizzesController < ApplicationController
     @total = ROUNDS_PER_GAME
     @last_result = session.delete(:last_result)
     @last_answer = session.delete(:last_answer)
+    @last_guess_name = session.delete(:last_guess_name)
   end
 
   def guess
@@ -37,10 +38,16 @@ class QuizzesController < ApplicationController
     end
 
     guess_text = params[:guess].to_s
+    outcome, matched_twin = country.evaluate_guess(guess_text, @mode, I18n.locale)
 
-    if country.matches_guess?(guess_text, I18n.locale)
+    case outcome
+    when :correct
       session[:quiz_score] = [session[:quiz_score].to_i + 1, ROUNDS_PER_GAME].min
       session[:last_result] = "correct"
+    when :twin_accepted
+      session[:quiz_score] = [session[:quiz_score].to_i + 1, ROUNDS_PER_GAME].min
+      session[:last_result] = "correct_twin"
+      session[:last_guess_name] = matched_twin.display_name(I18n.locale)
     else
       session[:last_result] = "wrong"
     end
@@ -102,6 +109,7 @@ class QuizzesController < ApplicationController
     @final_score = summary["score"].to_i.clamp(0, ROUNDS_PER_GAME)
     @last_result = summary["last_result"]
     @last_answer = summary["last_answer"]
+    @last_guess_name = summary["last_guess_name"]
     @round = ROUNDS_PER_GAME
     @total = ROUNDS_PER_GAME
     @country = Country.find_by(id: summary["country_id"])
@@ -114,8 +122,9 @@ class QuizzesController < ApplicationController
       "score" => session[:quiz_score].to_i.clamp(0, ROUNDS_PER_GAME),
       "country_id" => country&.id,
       "last_result" => session[:last_result],
-      "last_answer" => session[:last_answer]
-    }
+      "last_answer" => session[:last_answer],
+      "last_guess_name" => session[:last_guess_name]
+    }.compact
     reset_game
   end
 
@@ -147,6 +156,7 @@ class QuizzesController < ApplicationController
     session[:seen_ids] = []
     session.delete(:last_result)
     session.delete(:last_answer)
+    session.delete(:last_guess_name)
   end
 
   def pick_next_country
