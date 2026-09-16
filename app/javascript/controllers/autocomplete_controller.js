@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "list"]
+  static targets = ["input", "list", "submit"]
   static values = { url: String }
 
   connect() {
@@ -10,6 +10,7 @@ export default class extends Controller {
     this.activeIndex = -1
     this.fetchCountries()
     requestAnimationFrame(() => this.inputTarget.focus())
+    this.updateSubmitState()
     this.inputTarget.addEventListener("input", () => this.onInput())
     this.inputTarget.addEventListener("keydown", (e) => this.onKeydown(e))
     document.addEventListener("click", (e) => {
@@ -27,6 +28,7 @@ export default class extends Controller {
   }
 
   onInput() {
+    this.updateSubmitState()
     const q = this.normalize(this.inputTarget.value)
     if (q.length < 3) return this.hide()
     this.filtered = this.countries
@@ -40,6 +42,10 @@ export default class extends Controller {
     if (e.key === "ArrowDown") { e.preventDefault(); this.move(1) }
     else if (e.key === "ArrowUp") { e.preventDefault(); this.move(-1) }
     else if (e.key === "Enter") {
+      if (this.normalize(this.inputTarget.value).length < 3) {
+        e.preventDefault()
+        return
+      }
       if (this.activeIndex >= 0 && this.filtered[this.activeIndex]) {
         e.preventDefault()
         this.choose(this.filtered[this.activeIndex])
@@ -56,7 +62,13 @@ export default class extends Controller {
 
   choose(country) {
     this.inputTarget.value = country.name
+    this.updateSubmitState()
     this.hide()
+  }
+
+  updateSubmitState() {
+    if (!this.hasSubmitTarget) return
+    this.submitTarget.disabled = this.normalize(this.inputTarget.value).length < 3
   }
 
   render() {

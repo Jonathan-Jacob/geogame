@@ -28,6 +28,8 @@ namespace :shapes do
     CLUSTER_GAP_DEG = 10.0
     # Spherical Mercator latitude clamp (standard +/-85.05112878).
     MERCATOR_MAX_LAT = 85.05112878
+    # Micro-states (Vatican, Monaco, …) otherwise get a sub-pixel viewBox and vanish on screen.
+    MIN_VIEW_SPAN = 0.05
 
     # Unwrap a linear ring so it doesn't jump across the antimeridian
     # (Russia/Chukotka, Fiji, NZ Chathams, ...). Returns new array.
@@ -135,6 +137,16 @@ namespace :shapes do
       min_y, max_y = ys.minmax
       w = [max_x - min_x, 1e-9].max
       h = [max_y - min_y, 1e-9].max
+      if w < MIN_VIEW_SPAN || h < MIN_VIEW_SPAN
+        cx = (min_x + max_x) / 2.0
+        cy = (min_y + max_y) / 2.0
+        w = [w, MIN_VIEW_SPAN].max
+        h = [h, MIN_VIEW_SPAN].max
+        min_x = cx - w / 2.0
+        min_y = cy - h / 2.0
+        max_x = min_x + w
+        max_y = min_y + h
+      end
       pad_x = w * 0.05
       pad_y = h * 0.05
       view_box = "#{min_x - pad_x} #{min_y - pad_y} #{w + pad_x * 2} #{h + pad_y * 2}"

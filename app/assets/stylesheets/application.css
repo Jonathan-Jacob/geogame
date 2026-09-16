@@ -157,9 +157,13 @@ button:disabled {
   transition: transform 0.12s, box-shadow 0.12s;
 }
 
-.geo-btn-primary:hover {
+.geo-btn-primary:hover:not(:disabled) {
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 var(--ink);
+}
+
+.geo-btn-primary:disabled {
+  opacity: 0.45;
 }
 
 .geo-btn-secondary {

@@ -56,7 +56,7 @@
                 class: "geo-input w-full rounded-xl px-4 py-3 text-lg font-medium bg-white" %>
             <ul data-autocomplete-target="list" class="hidden absolute z-10 left-0 right-0 mt-1 bg-white border-2 border-indigo-950 rounded-xl shadow-[3px_3px_0_#1e1b4b] overflow-hidden max-h-48 overflow-y-auto"></ul>
           </div>
-          <%= submit_tag t("quiz.submit"), class: "geo-btn-primary w-full sm:w-auto shrink-0 px-6 py-3 rounded-xl text-lg font-bold" %>
+          <%= submit_tag t("quiz.submit"), disabled: true, data: { autocomplete_target: "submit" }, class: "geo-btn-primary w-full sm:w-auto shrink-0 px-6 py-3 rounded-xl text-lg font-bold" %>
         </div>
         <p class="text-xs text-indigo-900/50 mt-1.5 text-center"><%= t("quiz.enter_hint") %></p>
       <% end %>
