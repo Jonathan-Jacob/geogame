@@ -1,9 +1,11 @@
 # Data sources (vendored at deploy time, see below — nothing committed that is huge)
 #
-# Shapes: Natural Earth 50m Admin-0 (public domain)
+# Shapes: Natural Earth Admin-0 (public domain)
 #   - You (not the agent) run: `bin/rails shapes:build`
-#   - Downloads to vendor/geo/ne_50m_admin_0_countries.geojson (ignored by git)
-#     and builds app/assets/images/shapes/<iso2>.svg per country.
+#   - Downloads vendor/geo/ne_50m_admin_0_countries.geojson, ne_10m for micro-states,
+#     and geoBoundaries ADM0 for ultra-small countries (all under vendor/geo/, gitignored);
+#     builds
+#     app/assets/images/shapes/<iso2>.svg per country.
 #
 # Flags: lipis/flag-icons (MIT) — https://github.com/lipis/flag-icons
 #   - You run the snippet from DEPLOY_NOTES (copies only the ~197 needed SVGs

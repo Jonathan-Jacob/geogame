@@ -20,6 +20,10 @@ de:
     hard: "Schwer"
     mixed: "Gemischt"
     difficulty_label: "Schwierigkeit"
+    cheat_sheet_link: "Spickzettel — alle Formen & Flaggen"
+  asset_gallery:
+    title: "Spickzettel"
+    subtitle: "Alle %{count} Länder — Formen und Flaggen"
   quiz:
     round: "Runde %{current} von %{total}"
     score: "%{score} Punkte"

@@ -1,0 +1,63 @@
+# Per-country shape territory policy for `rails shapes:build` (ISO 3166-1 alpha-2, lowercase).
+#
+# mainland_only  — largest polygon only (drops mid-ocean islands).
+# keep_cluster   — flood-fill from largest polygon within cluster_gap_deg (archipelagos).
+# proximity_only — anchor + mainland_gap_deg only (no far detached parts, e.g. French Guiana).
+# Everyone else  — proximity + significant-area heuristic (see default:).
+#
+# exclude_centroid_in — drop rings whose centroid is inside a box
+#   [min_lon, min_lat, max_lon, max_lat] (degrees). Quote keys like "no" (YAML boolean).
+
+default:
+  cluster_gap_deg: 10.0
+  mainland_gap_deg: 4.0
+  significant_area_ratio: 0.10
+
+# Micro-states still coarse at Natural Earth 10m → geoBoundaries ADM0 (see shapes.rake).
+ultra_detail:
+  - nr
+  - sm
+  - va
+ultra_detail_max_vertices: 30
+
+mainland_only:
+  - pt
+
+proximity_only:
+  - fr
+
+keep_cluster:
+  - ag
+  - bs
+  - cv
+  - fj
+  - fm
+  - gd
+  - gr
+  - id
+  - jp
+  - ki
+  - kn
+  - lc
+  - mh
+  - mv
+  - my
+  - nr
+  - nz
+  - pg
+  - ph
+  - pw
+  - sb
+  - sc
+  - to
+  - tv
+  - vu
+  - ws
+
+exclude_centroid_in:
+  pw:
+    - [130.5, 2.5, 132.05, 4.2]
+    - [132.05, 5.15, 132.35, 5.45]
+  "no":
+    - [9.0, 76.0, 34.0, 81.0]
+    - [18.6, 74.25, 19.45, 74.6]

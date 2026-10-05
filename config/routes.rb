@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     post "quiz/:mode/skip", to: "quizzes#skip", as: :quiz_skip, constraints: { mode: /shape|flag/ }
     post "quiz/reset", to: "quizzes#reset", as: :quiz_reset
     get "countries.json", to: "countries#index", as: :countries_json
+    get "_assets/shapes-flags", to: "asset_gallery#index", as: :asset_gallery
   end
 
   root to: redirect("/de", status: 302)

@@ -20,6 +20,10 @@ en:
     hard: "Hard"
     mixed: "Mixed"
     difficulty_label: "Difficulty"
+    cheat_sheet_link: "Cheat sheet — all shapes & flags"
+  asset_gallery:
+    title: "Cheat sheet"
+    subtitle: "All %{count} countries — shapes and flags"
   quiz:
     round: "Round %{current} of %{total}"
     score: "%{score} points"

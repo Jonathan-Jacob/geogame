@@ -1,5 +1,5 @@
 module QuizHelper
-  def shape_svg(country)
+  def shape_svg(country, fixed_frame: false)
     path = Rails.root.join("app/assets/images/shapes/#{country.iso2.downcase}.svg")
     unless path.exist?
       return content_tag(:div, t("quiz.shape_missing"),
@@ -7,7 +7,7 @@ module QuizHelper
     end
 
     raw = path.read
-    style = shape_aspect_style(raw)
+    style = fixed_frame ? nil : shape_aspect_style(raw)
     content_tag(:div, raw.html_safe, class: "country-shape-canvas", style: style)
   end
 

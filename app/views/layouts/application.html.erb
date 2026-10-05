@@ -43,7 +43,8 @@
         </div>
       </div>
     </header>
-    <main class="geo-main flex-1 min-h-0 flex flex-col max-w-2xl w-full mx-auto px-4 pb-4">
+    <% main_max_width = controller_name == "asset_gallery" ? "max-w-6xl" : "max-w-2xl" %>
+    <main class="geo-main flex-1 min-h-0 flex flex-col <%= main_max_width %> w-full mx-auto px-4 pb-4">
       <%= yield %>
     </main>
   </body>

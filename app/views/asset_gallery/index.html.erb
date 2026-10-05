@@ -1,0 +1,20 @@
+<div class="asset-gallery-page py-6 w-full">
+  <h1 class="font-heading text-2xl mb-1 text-center"><%= t("asset_gallery.title") %></h1>
+  <p class="text-sm text-indigo-900/70 mb-6 text-center"><%= t("asset_gallery.subtitle", count: @countries.size) %></p>
+
+  <ul class="asset-gallery-grid list-none p-0 m-0">
+    <% @countries.each do |country| %>
+      <li class="asset-gallery-cell">
+        <div class="asset-gallery-shape">
+          <%= shape_svg(country, fixed_frame: true) %>
+        </div>
+        <div class="asset-gallery-flag">
+          <%= flag_svg(country, css_class: "asset-gallery-flag-img") %>
+        </div>
+        <p class="asset-gallery-label">
+          <span class="asset-gallery-name" title="<%= country.display_name %>"><%= country.display_name %></span>
+        </p>
+      </li>
+    <% end %>
+  </ul>
+</div>
