@@ -1,6 +1,5 @@
 class AssetGalleryController < ApplicationController
   def index
-    name_column = I18n.locale.to_sym == :en ? :name_en : :name_de
-    @countries = Country.order(name_column)
+    @countries = Country.ordered_by_display_name
   end
 end

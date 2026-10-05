@@ -38,6 +38,20 @@ class Country < ApplicationRecord
     locale.to_sym == :en ? name_en : name_de
   end
 
+  # German-phonebook style: Ä→AE, Ö→OE, Ü→UE (then case-insensitive).
+  def self.collating_key(name)
+    name.to_s
+      .gsub("Ä", "AE").gsub("ä", "ae")
+      .gsub("Ö", "OE").gsub("ö", "oe")
+      .gsub("Ü", "UE").gsub("ü", "ue")
+      .downcase
+  end
+
+  def self.ordered_by_display_name(locale = I18n.locale)
+    column = locale.to_sym == :en ? :name_en : :name_de
+    all.sort_by { |country| collating_key(country.public_send(column)) }
+  end
+
   def all_names
     [sporcle_name, name_de, name_en, *aliases_de, *aliases_en].compact.map(&:to_s)
   end
