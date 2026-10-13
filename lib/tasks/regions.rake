@@ -142,23 +142,25 @@ namespace :regions do
       kept
     end
 
-    outer_rings = lambda do |feature, include_holes: false|
+    polygon_parts = lambda do |feature|
       geom = feature["geometry"]
-      return [] unless geom
+      return [[], []] unless geom
 
       polys = case geom["type"]
       when "Polygon" then [geom["coordinates"]]
       when "MultiPolygon" then geom["coordinates"]
       else []
       end
-      polys.flat_map do |poly|
-        rings = include_holes ? poly : [ poly.first ]
-        rings.filter_map do |ring|
+      exteriors = []
+      holes = []
+      polys.each do |poly|
+        poly.each_with_index do |ring, index|
           next if ring.nil? || ring.size < 4
 
-          unwrapper.call(ring)
+          (index.zero? ? exteriors : holes) << unwrapper.call(ring)
         end
       end
+      [exteriors, holes]
     end
 
     point_inside = lambda do |pt, ring|
@@ -189,19 +191,27 @@ namespace :regions do
       [ uniq.sum(&:first) / count, uniq.sum(&:last) / count ]
     end
 
-    # A ring whose center sits inside a larger ring is a hole, or the exclave that fills one.
-    # The outer ring already covers that area, so the inner ring is dropped.
-    drop_holes = lambda do |rings|
+    # Rings inside a larger ring are either a real enclave (Berlin in Brandenburg)
+    # or a stray inner polygon. Only the enclave stays, as a hole.
+    split_contained = lambda do |rings, code, keep_hole|
       areas = rings.map { |ring| ring_abs_area.call(ring) }
-      rings.reject.with_index do |ring, index|
+      outers = []
+      holes = []
+      rings.each_with_index do |ring, index|
         center = ring_centroid.call(ring)
-        rings.each_with_index.any? do |other, other_index|
+        contained = rings.each_with_index.any? do |other, other_index|
           next false if other_index == index
           next false unless areas[other_index] > areas[index]
 
           point_inside.call(center, other)
         end
+        if contained
+          holes << ring if keep_hole.call(ring, code)
+        else
+          outers << ring
+        end
       end
+      [outers, holes]
     end
 
     # Drop edges shared by two provinces so only the region outline remains.
@@ -283,8 +293,8 @@ namespace :regions do
       adm1_by_iso3[iso3] = {}
     end
 
-    build_svg = lambda do |rings, ultra_res: false|
-      point_rings = rings.map do |ring|
+    build_svg = lambda do |rings, holes: [], ultra_res: false|
+      point_rings = (rings + holes).map do |ring|
         pts = ultra_res ? ring : decimate.call(ring)
         pts.map { |lon, lat| projector.call(lon, lat) }
       end
@@ -296,14 +306,14 @@ namespace :regions do
       h = [max_y - min_y, 1e-9].max
 
       coord_precision = ultra_res ? 6 : 4
-      paths = point_rings.map do |pts|
+      d = point_rings.map do |pts|
         pts.map.with_index { |(x, y), i| "#{i.zero? ? 'M' : 'L'}#{x.round(coord_precision)},#{y.round(coord_precision)}" }.join(" ") + " Z"
-      end
+      end.join(" ")
 
       pad_x = w * 0.05
       pad_y = h * 0.05
       view_box = "#{min_x - pad_x} #{min_y - pad_y} #{w + pad_x * 2} #{h + pad_y * 2}"
-      %(<svg xmlns="http://www.w3.org/2000/svg" viewBox="#{view_box}"><g vector-effect="non-scaling-stroke" stroke-width="3" stroke-linejoin="round">#{paths.map { |d| %(<path d="#{d}"/>) }.join}</g></svg>)
+      %(<svg xmlns="http://www.w3.org/2000/svg" viewBox="#{view_box}"><g vector-effect="non-scaling-stroke" stroke-width="3" stroke-linejoin="round"><path fill-rule="evenodd" d="#{d}"/></g></svg>)
     end
 
     # Natural Earth admin-1 stores Italian provinces, not the 20 regions.
@@ -331,7 +341,8 @@ namespace :regions do
     }
 
     geo = JSON.parse(File.read(vendor_path))
-    rings_by_code = Hash.new { |h, k| h[k] = [] }
+    exteriors_by_code = Hash.new { |h, k| h[k] = [] }
+    interiors_by_code = Hash.new { |h, k| h[k] = [] }
     geo["features"].each do |feature|
       props = feature["properties"] || {}
       code = if props["iso_a2"] == "IT"
@@ -341,22 +352,71 @@ namespace :regions do
       end
       next unless code && wanted.include?(code)
 
-      rings_by_code[code].concat(outer_rings.call(feature, include_holes: code.start_with?("it-")))
+      exteriors, holes = polygon_parts.call(feature)
+      exteriors_by_code[code].concat(exteriors)
+      interiors_by_code[code].concat(holes)
+    end
+
+    wanted.each do |code|
+      next unless code.start_with?("it-")
+
+      exteriors_by_code[code] = dissolve_rings.call(exteriors_by_code[code] + interiors_by_code[code])
+      interiors_by_code[code] = []
+    end
+
+    anchors = {}
+    exteriors_by_code.each do |code, rings|
+      next if rings.empty?
+
+      anchors[code] = ring_centroid.call(rings.max_by { |ring| ring_abs_area.call(ring) })
+    end
+
+    # Country outlines already cached for the country shapes (Vatican, San Marino, …).
+    # A hole is kept when its center lies inside one of these, other than the region's own country.
+    country_rings = {}
+    Dir[geoboundaries_dir.join("*.geojson")].each do |path|
+      iso3 = File.basename(path, ".geojson")
+      next if iso3.include?("-")
+
+      collection = JSON.parse(File.read(path))
+      rings = []
+      collection["features"].each do |feature|
+        geom = feature["geometry"]
+        next unless geom
+
+        polys = geom["type"] == "Polygon" ? [geom["coordinates"]] : geom["coordinates"]
+        polys.each { |poly| rings << poly.first if poly.first && poly.first.size >= 4 }
+      end
+      country_rings[iso3] = rings if rings.any?
+    end
+
+    enclave_hole = lambda do |ring, code|
+      return true if anchors.any? { |other, point| other != code && point_inside.call(point, ring) }
+
+      center = ring_centroid.call(ring)
+      parent = iso2_to_iso3[code.split("-", 2).first]
+      country_rings.any? do |iso3, rings|
+        next false if iso3 == parent
+
+        rings.any? { |country_ring| point_inside.call(center, country_ring) }
+      end
     end
 
     built = 0
     missing = []
     ultra_detail_notes = []
+    enclave_notes = []
     wanted.each do |code|
-      rings = rings_by_code[code]
+      rings = exteriors_by_code[code]
       if rings.empty?
         missing << code
         next
       end
 
       if code.start_with?("it-")
-        rings = dissolve_rings.call(rings)
-        rings = drop_holes.call(rings)
+        rings, holes = split_contained.call(rings, code, enclave_hole)
+      else
+        holes = interiors_by_code[code].select { |ring| enclave_hole.call(ring, code) }
       end
       kept = select_rings.call(rings, code)
       ultra = false
@@ -364,17 +424,21 @@ namespace :regions do
         iso3 = iso2_to_iso3[code.split("-", 2).first]
         feature = iso3 && load_adm1.call(iso3)[code]
         if feature
-          kept = select_rings.call(outer_rings.call(feature), code)
+          ext, hol = polygon_parts.call(feature)
+          kept = select_rings.call(ext, code)
+          holes = hol.select { |ring| enclave_hole.call(ring, code) }
           ultra = true
           ultra_detail_notes << code
         end
       end
-      File.write(out_dir.join("#{code}.svg"), build_svg.call(kept, ultra_res: ultra))
+      enclave_notes << code if holes.any?
+      File.write(out_dir.join("#{code}.svg"), build_svg.call(kept, holes: holes, ultra_res: ultra))
       built += 1
     end
 
     puts "Built #{built} region shape SVGs into #{out_dir}"
     ultra_detail_notes.sort.each { |code| puts "  #{code}: geoBoundaries ADM1 (more corners)" }
+    enclave_notes.sort.each { |code| puts "  #{code}: hole kept for a place inside it" }
     puts "Missing from Natural Earth: #{missing.join(', ')}" if missing.any?
   end
 

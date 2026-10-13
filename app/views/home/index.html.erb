@@ -40,7 +40,7 @@
 
   <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
     <%= link_to quiz_path(**shape_quiz_params),
-        data: { level_picker_target: "link", turbo_action: "replace" },
+        data: { level_picker_target: "link", turbo_action: "replace", turbo_prefetch: false },
         class: "geo-card geo-card--shape rounded-2xl p-6 sm:p-8 text-center block -rotate-1 hover:rotate-0" do %>
       <div class="text-5xl mb-2">🗺️</div>
       <h2 class="font-heading text-2xl mb-1"><%= t(special ? "home.special_shape_card_title" : "home.shape_card_title") %></h2>
@@ -48,7 +48,7 @@
     <% end %>
 
     <%= link_to quiz_path(**flag_quiz_params),
-        data: { level_picker_target: "link", turbo_action: "replace" },
+        data: { level_picker_target: "link", turbo_action: "replace", turbo_prefetch: false },
         class: "geo-card geo-card--flag rounded-2xl p-6 sm:p-8 text-center block rotate-1 hover:rotate-0" do %>
       <div class="text-5xl mb-2">🏳️</div>
       <h2 class="font-heading text-2xl mb-1"><%= t(special ? "home.special_flag_card_title" : "home.flag_card_title") %></h2>

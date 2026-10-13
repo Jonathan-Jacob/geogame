@@ -9,14 +9,21 @@ class QuizzesController < ApplicationController
   before_action :disable_turbo_preview_cache, only: :show
 
   def show
+    if prefetch_request?
+      assign_saved_quiz
+      return
+    end
+
     if session.delete(:quiz_restart)
       clear_finished_state_for_current_game
+      forget_progress
       reset_game
     else
       reset_game_if_needed
     end
     return if load_finished_state!
 
+    restore_progress_if_rewound
     @country = pick_next_subject
     session[:current_country_id] = @country&.id
     @round = session[:quiz_round]
@@ -26,6 +33,7 @@ class QuizzesController < ApplicationController
     @last_result = session.delete(:last_result)
     @last_answer = session.delete(:last_answer)
     @last_guess_name = session.delete(:last_guess_name)
+    remember_progress
   end
 
   def guess
@@ -60,6 +68,8 @@ class QuizzesController < ApplicationController
 
     if session[:quiz_round] > ROUNDS_PER_GAME
       finish_game!(country)
+    else
+      remember_progress
     end
 
     redirect_to quiz_path(quiz_link_params)
@@ -77,13 +87,18 @@ class QuizzesController < ApplicationController
     session[:quiz_round] = session[:quiz_round].to_i + 1
     session[:current_country_id] = nil
 
-    finish_game!(country) if session[:quiz_round] > ROUNDS_PER_GAME
+    if session[:quiz_round] > ROUNDS_PER_GAME
+      finish_game!(country)
+    else
+      remember_progress
+    end
 
     redirect_to quiz_path(quiz_link_params)
   end
 
   def reset
     session.delete(:quiz_summary)
+    forget_progress
     reset_game
     redirect_to quiz_path(quiz_link_params)
   end
@@ -150,6 +165,7 @@ class QuizzesController < ApplicationController
       "last_answer" => session[:last_answer],
       "last_guess_name" => session[:last_guess_name]
     }.compact
+    forget_progress
     reset_game
   end
 
@@ -183,6 +199,63 @@ class QuizzesController < ApplicationController
     session.delete(:last_result)
     session.delete(:last_answer)
     session.delete(:last_guess_name)
+  end
+
+  # Read-only render for a prefetched quiz page. Must not reset or advance.
+  def assign_saved_quiz
+    if game_over?
+      load_finished_state!
+      return
+    end
+
+    if session[:game_key] == game_key && session[:quiz_round].present?
+      @country = find_subject(session[:current_country_id])
+      @round = session[:quiz_round]
+      @score = session[:quiz_score].to_i
+      @total = ROUNDS_PER_GAME
+      @last_result = session[:last_result]
+      @last_answer = session[:last_answer]
+      @last_guess_name = session[:last_guess_name]
+    else
+      @country = nil
+      @round = 1
+      @score = 0
+      @total = ROUNDS_PER_GAME
+    end
+  end
+
+  def progress_store
+    session[:quiz_progress] = {} unless session[:quiz_progress].is_a?(Hash)
+    session[:quiz_progress]
+  end
+
+  def remember_progress
+    progress_store[game_key] = {
+      "round" => session[:quiz_round],
+      "score" => session[:quiz_score],
+      "current_country_id" => session[:current_country_id],
+      "queued_country_id" => session[:queued_country_id],
+      "seen_ids" => session[:seen_ids]
+    }
+  end
+
+  def forget_progress
+    progress_store.delete(game_key)
+  end
+
+  # A hover prefetch can write round 1 over an in-progress game. The saved
+  # copy is ahead of that, so put the round back.
+  def restore_progress_if_rewound
+    saved = progress_store[game_key]
+    return unless saved.is_a?(Hash)
+    return unless saved["round"].to_i > session[:quiz_round].to_i
+
+    session[:game_key] = game_key
+    session[:quiz_round] = saved["round"]
+    session[:quiz_score] = saved["score"]
+    session[:current_country_id] = saved["current_country_id"]
+    session[:queued_country_id] = saved["queued_country_id"]
+    session[:seen_ids] = saved["seen_ids"]
   end
 
   def pick_next_subject

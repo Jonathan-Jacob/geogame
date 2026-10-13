@@ -30,16 +30,20 @@
     <header class="shrink-0 px-4 py-2">
       <% on_home = controller_name == "home" && action_name == "index" %>
       <div class="max-w-2xl mx-auto flex items-center justify-between gap-3">
-        <%= link_to home_path_for_quiz, class: "font-heading text-xl tracking-tight hover:opacity-80" do %>
+        <%= link_to home_path_for_quiz, data: { turbo_prefetch: false }, class: "font-heading text-xl tracking-tight hover:opacity-80" do %>
           <%= t("app.name") %>
         <% end %>
         <div class="flex items-center gap-2">
           <% unless on_home %>
             <%= link_to t("nav.home"), home_path_for_quiz,
+                data: { turbo_prefetch: false },
                 class: "geo-pill px-3 py-1 text-sm rounded-full bg-white" %>
           <% end %>
           <% other = I18n.locale == :de ? :en : :de %>
-          <%= link_to other.to_s.upcase, url_for(locale: other, view: params[:view].presence), class: "geo-pill px-3 py-1 text-sm rounded-full bg-white" %>
+          <%= link_to other.to_s.upcase,
+              url_for({ locale: other, view: params[:view].presence, edition: params[:edition].presence, level: params[:level].presence }.compact),
+              data: { turbo_prefetch: false },
+              class: "geo-pill px-3 py-1 text-sm rounded-full bg-white" %>
         </div>
       </div>
     </header>
