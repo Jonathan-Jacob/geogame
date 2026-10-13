@@ -1,6 +1,6 @@
 module QuizHelper
   def shape_svg(country, fixed_frame: false)
-    path = Rails.root.join("app/assets/images/shapes/#{country.iso2.downcase}.svg")
+    path = Rails.root.join("app/assets/images", country.shape_path)
     unless path.exist?
       return content_tag(:div, t("quiz.shape_missing"),
         class: "country-shape-missing flex items-center justify-center bg-slate-100 rounded-xl p-8 text-slate-400")
@@ -22,17 +22,41 @@ module QuizHelper
   end
 
   def flag_svg(country, css_class: "w-full max-w-[420px] rounded-xl shadow")
-    path = Rails.root.join("app/assets/images/flags/#{country.iso2.downcase}.svg")
+    path = Rails.root.join("app/assets/images", country.flag_path)
     if path.exist?
-      image_tag("flags/#{country.iso2.downcase}.svg", alt: t("quiz.flag_alt"), class: css_class)
+      image_tag(country.flag_path, alt: t("quiz.flag_alt"), class: css_class)
     else
       content_tag(:div, t("quiz.flag_missing"), class: "p-8 bg-slate-100 rounded-xl text-slate-400")
     end
   end
 
-  def level_badge(level)
+  def level_badge(level, edition: nil)
+    if edition
+      return content_tag(:span, t("quiz.editions.#{edition}.badge"), class: "geo-chip bg-teal-200")
+    end
+
     colors = { "easy" => "bg-emerald-200", "medium" => "bg-amber-200", "hard" => "bg-rose-200", "mixed" => "bg-sky-200" }
     content_tag(:span, t("quiz.level_#{level}"), class: "geo-chip #{colors[level] || 'bg-white'}")
+  end
+
+  def quiz_prompt(mode, edition)
+    if edition
+      t("quiz.editions.#{edition}.#{mode}_question")
+    elsif mode == "shape"
+      t("quiz.shape_question")
+    else
+      t("quiz.flag_question")
+    end
+  end
+
+  def quiz_guess_placeholder(mode, edition)
+    example = if edition
+      t("quiz.editions.#{edition}.example")
+    else
+      mode == "shape" ? "Frankreich" : "Japan"
+    end
+    key = edition ? "quiz.guess_placeholder_region" : "quiz.guess_placeholder"
+    t(key, example: example)
   end
 
   FINISHED_EMOJI = { zero: "🤞", low: "💪", mid: "🥳", high: "😍", perfect: "🤯" }.freeze

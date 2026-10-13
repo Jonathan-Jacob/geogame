@@ -19,6 +19,14 @@ html {
   background-color: #fde68a;
 }
 
+html:has(body.geo-special) {
+  background-color: #99f6e4;
+  --geo-bg-image:
+    radial-gradient(circle at 20% 80%, rgba(244, 114, 182, 0.35) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.45) 0%, transparent 50%),
+    linear-gradient(135deg, #ccfbf1 0%, #99f6e4 40%, #fbcfe8 100%);
+}
+
 body {
   font-family: var(--font-body);
 }
@@ -232,6 +240,18 @@ button:disabled {
   grid-template-columns: repeat(auto-fill, 100px);
   gap: 8px;
   justify-content: center;
+  align-items: stretch;
+}
+
+.asset-gallery-group + .asset-gallery-group {
+  margin-top: 2rem;
+}
+
+.asset-gallery-group-title {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
 }
 
 .asset-gallery-cell {
@@ -292,9 +312,12 @@ button:disabled {
 
 .asset-gallery-flag-img {
   display: block;
-  width: 100px;
+  width: auto;
   height: auto;
-  max-height: 100px;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 0;
+  min-height: 0;
   object-fit: contain;
   border-radius: 0.25rem;
   box-shadow: none;
@@ -302,6 +325,7 @@ button:disabled {
 
 .asset-gallery-label {
   width: 100px;
+  height: 1.2em;
   margin: 4px 0 0;
   text-align: center;
   font-size: 0.65rem;
@@ -316,12 +340,20 @@ button:disabled {
   white-space: nowrap;
 }
 
+.quiz-flag {
+  container-type: inline-size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .quiz-flag img {
   display: block;
-  max-height: 260px;
-  max-height: min(38vh, 260px);
+  box-sizing: border-box;
+  /* Same height every round. 38cqw keeps a very wide flag inside the panel. */
+  height: min(38vh, 260px, 38cqw);
   width: auto;
-  max-width: min(100%, 28rem);
+  max-width: 100%;
   margin: 0 auto;
   border: var(--card-border);
   box-shadow: var(--shadow-offset);

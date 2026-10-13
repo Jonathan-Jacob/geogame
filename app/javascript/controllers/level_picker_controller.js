@@ -2,7 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["pill", "link"]
-  static values = { level: { type: String, default: "mixed" } }
+  static values = {
+    level: { type: String, default: "mixed" },
+    param: { type: String, default: "level" }
+  }
 
   connect() {
     this.updateLinks()
@@ -20,7 +23,7 @@ export default class extends Controller {
   updateLinks() {
     this.linkTargets.forEach((link) => {
       const url = new URL(link.href, window.location.origin)
-      url.searchParams.set("level", this.levelValue)
+      url.searchParams.set(this.paramValue, this.levelValue)
       link.href = url.pathname + url.search
     })
   }

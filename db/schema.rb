@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_12_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_13_000000) do
   create_table "countries", force: :cascade do |t|
     t.text "aliases_de", default: "[]"
     t.text "aliases_en", default: "[]"
@@ -28,5 +28,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_12_000000) do
     t.index ["iso2"], name: "index_countries_on_iso2", unique: true
     t.index ["iso3"], name: "index_countries_on_iso3", unique: true
     t.index ["sporcle_name"], name: "index_countries_on_sporcle_name", unique: true
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.text "aliases_de", default: "[]"
+    t.text "aliases_en", default: "[]"
+    t.string "code", null: false
+    t.datetime "created_at", null: false
+    t.string "edition", null: false
+    t.string "name_de", null: false
+    t.string "name_en", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_regions_on_code", unique: true
+    t.index ["edition"], name: "index_regions_on_edition"
   end
 end

@@ -21,9 +21,25 @@ en:
     mixed: "Mixed"
     difficulty_label: "Difficulty"
     cheat_sheet_link: "Cheat sheet — all shapes & flags"
+    view_label: "Quiz"
+    world_view: "Countries of the world"
+    special_view: "Special editions"
+    special_title: "Which region is it?"
+    special_subtitle: "Can you recognize them by shape or flag? 10 rounds per game — have fun!"
+    special_shape_card_title: "Shapes"
+    special_shape_card_text: "Look at the outline and type the name."
+    special_flag_card_title: "Flags"
+    special_flag_card_text: "Look at the flag and type the name."
+    edition_label: "Edition"
+    editions:
+      us_states: "States US"
+      de_states: "States DE"
+      ch_cantons: "Cantons CH"
+      it_regions: "Regions IT"
   asset_gallery:
     title: "Cheat sheet"
     subtitle: "All %{count} countries — shapes and flags"
+    subtitle_special: "States US, States DE, Cantons CH, Regions IT"
   quiz:
     round: "Round %{current} of %{total}"
     score: "%{score} points"
@@ -54,3 +70,25 @@ en:
     shape_missing: "Shape is still loading …"
     flag_missing: "Flag is still loading …"
     flag_alt: "Flag to guess"
+    guess_placeholder_region: "Type a name … e.g. %{example}"
+    editions:
+      us_states:
+        badge: "US states"
+        shape_question: "Which US state has this shape?"
+        flag_question: "Which US state does this flag belong to?"
+        example: "California"
+      de_states:
+        badge: "German states"
+        shape_question: "Which German state has this shape?"
+        flag_question: "Which German state does this flag belong to?"
+        example: "Bavaria"
+      ch_cantons:
+        badge: "Cantons"
+        shape_question: "Which canton has this shape?"
+        flag_question: "Which canton does this flag belong to?"
+        example: "Zurich"
+      it_regions:
+        badge: "Regions"
+        shape_question: "Which region has this shape?"
+        flag_question: "Which region does this flag belong to?"
+        example: "Tuscany"

@@ -21,9 +21,25 @@ de:
     mixed: "Gemischt"
     difficulty_label: "Schwierigkeit"
     cheat_sheet_link: "Spickzettel — alle Formen & Flaggen"
+    view_label: "Quiz"
+    world_view: "Länder der Welt"
+    special_view: "Sondereditionen"
+    special_title: "Welche Region ist das?"
+    special_subtitle: "Erkennst du sie an Form oder Flagge? 10 Runden pro Spiel — viel Spaß!"
+    special_shape_card_title: "Formen"
+    special_shape_card_text: "Sieh dir den Umriss an und tippe den Namen."
+    special_flag_card_title: "Flaggen"
+    special_flag_card_text: "Sieh dir die Flagge an und tippe den Namen."
+    edition_label: "Edition"
+    editions:
+      us_states: "Staaten US"
+      de_states: "Länder DE"
+      ch_cantons: "Kantone CH"
+      it_regions: "Regionen IT"
   asset_gallery:
     title: "Spickzettel"
     subtitle: "Alle %{count} Länder — Formen und Flaggen"
+    subtitle_special: "Staaten US, Länder DE, Kantone CH, Regionen IT"
   quiz:
     round: "Runde %{current} von %{total}"
     score: "%{score} Punkte"
@@ -54,3 +70,25 @@ de:
     shape_missing: "Form lädt noch …"
     flag_missing: "Flagge lädt noch …"
     flag_alt: "Gesuchte Flagge"
+    guess_placeholder_region: "Name eingeben … z. B. %{example}"
+    editions:
+      us_states:
+        badge: "US-Staaten"
+        shape_question: "Welcher US-Staat hat diese Form?"
+        flag_question: "Zu welchem US-Staat gehört diese Flagge?"
+        example: "Kalifornien"
+      de_states:
+        badge: "Bundesländer"
+        shape_question: "Welches Bundesland hat diese Form?"
+        flag_question: "Zu welchem Bundesland gehört diese Flagge?"
+        example: "Bayern"
+      ch_cantons:
+        badge: "Kantone"
+        shape_question: "Welcher Kanton hat diese Form?"
+        flag_question: "Zu welchem Kanton gehört diese Flagge?"
+        example: "Zürich"
+      it_regions:
+        badge: "Regionen"
+        shape_question: "Welche Region hat diese Form?"
+        flag_question: "Zu welcher Region gehört diese Flagge?"
+        example: "Toskana"

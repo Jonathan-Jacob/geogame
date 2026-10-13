@@ -3,6 +3,8 @@ class QuizzesController < ApplicationController
   LEVELS = %w[easy medium hard mixed].freeze
   ROUNDS_PER_GAME = 10
 
+  helper_method :quiz_link_params
+
   before_action :set_mode_level
   before_action :disable_turbo_preview_cache, only: :show
 
@@ -15,8 +17,8 @@ class QuizzesController < ApplicationController
     end
     return if load_finished_state!
 
-    @country = pick_next_country
-    session[:current_country_id] = @country.id
+    @country = pick_next_subject
+    session[:current_country_id] = @country&.id
     @round = session[:quiz_round]
     @score = session[:quiz_score]
     @total = ROUNDS_PER_GAME
@@ -27,13 +29,13 @@ class QuizzesController < ApplicationController
 
   def guess
     if game_over?
-      redirect_to quiz_path(mode: @mode, locale: I18n.locale, level: @level)
+      redirect_to quiz_path(quiz_link_params)
       return
     end
 
-    country = Country.find_by(id: session[:current_country_id])
+    country = find_subject(session[:current_country_id])
     unless country
-      redirect_to quiz_path(mode: @mode, locale: I18n.locale, level: @level)
+      redirect_to quiz_path(quiz_link_params)
       return
     end
 
@@ -59,16 +61,16 @@ class QuizzesController < ApplicationController
       finish_game!(country)
     end
 
-    redirect_to quiz_path(mode: @mode, locale: I18n.locale, level: @level)
+    redirect_to quiz_path(quiz_link_params)
   end
 
   def skip
     if game_over?
-      redirect_to quiz_path(mode: @mode, locale: I18n.locale, level: @level)
+      redirect_to quiz_path(quiz_link_params)
       return
     end
 
-    country = Country.find_by(id: session[:current_country_id])
+    country = find_subject(session[:current_country_id])
     session[:last_result] = "skipped"
     session[:last_answer] = country&.display_name(I18n.locale)
     session[:quiz_round] = session[:quiz_round].to_i + 1
@@ -76,24 +78,46 @@ class QuizzesController < ApplicationController
 
     finish_game!(country) if session[:quiz_round] > ROUNDS_PER_GAME
 
-    redirect_to quiz_path(mode: @mode, locale: I18n.locale, level: @level)
+    redirect_to quiz_path(quiz_link_params)
   end
 
   def reset
     session.delete(:quiz_summary)
     reset_game
-    redirect_to quiz_path(mode: params[:mode].in?(MODES) ? params[:mode] : "shape", locale: I18n.locale, level: params[:level].in?(LEVELS) ? params[:level] : "mixed")
+    redirect_to quiz_path(quiz_link_params)
   end
 
   private
 
+  def quiz_link_params
+    base = { mode: @mode, locale: I18n.locale }
+    @edition ? base.merge(edition: @edition) : base.merge(level: @level)
+  end
+
   def set_mode_level
     @mode = params[:mode].in?(MODES) ? params[:mode] : "shape"
-    @level = params[:level].in?(LEVELS) ? params[:level] : "mixed"
+    @edition = params[:edition].in?(Region::EDITIONS) ? params[:edition] : nil
+    @level = if @edition
+      nil
+    else
+      params[:level].in?(LEVELS) ? params[:level] : "mixed"
+    end
   end
 
   def game_key
-    "quiz_#{@mode}_#{@level}"
+    "quiz_#{@mode}_#{@edition || @level}"
+  end
+
+  def subject_scope
+    if @edition
+      Region.for_edition(@edition)
+    else
+      Country.for_mode_level(@mode, @level)
+    end
+  end
+
+  def find_subject(id)
+    subject_scope.find_by(id: id)
   end
 
   def game_over?
@@ -112,7 +136,7 @@ class QuizzesController < ApplicationController
     @last_guess_name = summary["last_guess_name"]
     @round = ROUNDS_PER_GAME
     @total = ROUNDS_PER_GAME
-    @country = Country.find_by(id: summary["country_id"])
+    @country = find_subject(summary["country_id"])
     true
   end
 
@@ -159,17 +183,19 @@ class QuizzesController < ApplicationController
     session.delete(:last_guess_name)
   end
 
-  def pick_next_country
+  def pick_next_subject
     if session[:current_country_id]
-      country = Country.find_by(id: session[:current_country_id])
-      return country if country
+      subject = find_subject(session[:current_country_id])
+      return subject if subject
     end
 
     seen = Array(session[:seen_ids])
-    pool = Country.for_mode_level(@mode, @level).where.not(id: seen)
-    pool = Country.for_mode_level(@mode, @level) if pool.none?
-    country = pool.order("RANDOM()").first
-    session[:seen_ids] = (seen + [country.id]).last(ROUNDS_PER_GAME * 2)
-    country
+    pool = subject_scope.where.not(id: seen)
+    pool = subject_scope if pool.none?
+    subject = pool.order("RANDOM()").first
+    return nil unless subject
+
+    session[:seen_ids] = (seen + [subject.id]).last(ROUNDS_PER_GAME * 2)
+    subject
   end
 end

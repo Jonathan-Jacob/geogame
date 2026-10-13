@@ -1,0 +1,663 @@
+# Special editions. `code` is ISO 3166-2, lowercase.
+# `flag` is the Wikimedia Commons SVG filename (downloaded by `bin/rails regions:flags`).
+# Shapes are built by `bin/rails regions:shapes` from Natural Earth admin-1.
+
+# --- US states (50) ---
+- code: us-al
+  edition: us_states
+  de: Alabama
+  en: Alabama
+  flag: Flag_of_Alabama.svg
+- code: us-ak
+  edition: us_states
+  de: Alaska
+  en: Alaska
+  flag: Flag_of_Alaska.svg
+- code: us-az
+  edition: us_states
+  de: Arizona
+  en: Arizona
+  flag: Flag_of_Arizona.svg
+- code: us-ar
+  edition: us_states
+  de: Arkansas
+  en: Arkansas
+  flag: Flag_of_Arkansas.svg
+- code: us-ca
+  edition: us_states
+  de: Kalifornien
+  en: California
+  aliases_de: [California]
+  aliases_en: [Kalifornien]
+  flag: Flag_of_California.svg
+- code: us-co
+  edition: us_states
+  de: Colorado
+  en: Colorado
+  flag: Flag_of_Colorado.svg
+- code: us-ct
+  edition: us_states
+  de: Connecticut
+  en: Connecticut
+  flag: Flag_of_Connecticut.svg
+- code: us-de
+  edition: us_states
+  de: Delaware
+  en: Delaware
+  flag: Flag_of_Delaware.svg
+- code: us-fl
+  edition: us_states
+  de: Florida
+  en: Florida
+  flag: Flag_of_Florida.svg
+- code: us-ga
+  edition: us_states
+  de: Georgia
+  en: Georgia
+  flag: Flag_of_Georgia_(U.S._state).svg
+- code: us-hi
+  edition: us_states
+  de: Hawaii
+  en: Hawaii
+  aliases_de: ["Hawai'i", Hawai]
+  aliases_en: ["Hawai'i"]
+  flag: Flag_of_Hawaii.svg
+- code: us-id
+  edition: us_states
+  de: Idaho
+  en: Idaho
+  flag: Flag_of_Idaho.svg
+- code: us-il
+  edition: us_states
+  de: Illinois
+  en: Illinois
+  flag: Flag_of_Illinois.svg
+- code: us-in
+  edition: us_states
+  de: Indiana
+  en: Indiana
+  flag: Flag_of_Indiana.svg
+- code: us-ia
+  edition: us_states
+  de: Iowa
+  en: Iowa
+  flag: Flag_of_Iowa.svg
+- code: us-ks
+  edition: us_states
+  de: Kansas
+  en: Kansas
+  flag: Flag_of_Kansas.svg
+- code: us-ky
+  edition: us_states
+  de: Kentucky
+  en: Kentucky
+  flag: Flag_of_Kentucky.svg
+- code: us-la
+  edition: us_states
+  de: Louisiana
+  en: Louisiana
+  flag: Flag_of_Louisiana.svg
+- code: us-me
+  edition: us_states
+  de: Maine
+  en: Maine
+  flag: Flag_of_Maine.svg
+- code: us-md
+  edition: us_states
+  de: Maryland
+  en: Maryland
+  flag: Flag_of_Maryland.svg
+- code: us-ma
+  edition: us_states
+  de: Massachusetts
+  en: Massachusetts
+  flag: Flag_of_Massachusetts.svg
+- code: us-mi
+  edition: us_states
+  de: Michigan
+  en: Michigan
+  flag: Flag_of_Michigan.svg
+- code: us-mn
+  edition: us_states
+  de: Minnesota
+  en: Minnesota
+  flag: Flag_of_Minnesota.svg
+- code: us-ms
+  edition: us_states
+  de: Mississippi
+  en: Mississippi
+  flag: Flag_of_Mississippi.svg
+- code: us-mo
+  edition: us_states
+  de: Missouri
+  en: Missouri
+  flag: Flag_of_Missouri.svg
+- code: us-mt
+  edition: us_states
+  de: Montana
+  en: Montana
+  flag: Flag_of_Montana.svg
+- code: us-ne
+  edition: us_states
+  de: Nebraska
+  en: Nebraska
+  flag: Flag_of_Nebraska.svg
+- code: us-nv
+  edition: us_states
+  de: Nevada
+  en: Nevada
+  flag: Flag_of_Nevada.svg
+- code: us-nh
+  edition: us_states
+  de: New Hampshire
+  en: New Hampshire
+  flag: Flag_of_New_Hampshire.svg
+- code: us-nj
+  edition: us_states
+  de: New Jersey
+  en: New Jersey
+  flag: Flag_of_New_Jersey.svg
+- code: us-nm
+  edition: us_states
+  de: New Mexico
+  en: New Mexico
+  aliases_de: [Neumexiko]
+  flag: Flag_of_New_Mexico.svg
+- code: us-ny
+  edition: us_states
+  de: New York
+  en: New York
+  flag: Flag_of_New_York.svg
+- code: us-nc
+  edition: us_states
+  de: North Carolina
+  en: North Carolina
+  aliases_de: [Nordkarolina]
+  flag: Flag_of_North_Carolina.svg
+- code: us-nd
+  edition: us_states
+  de: North Dakota
+  en: North Dakota
+  aliases_de: [Norddakota]
+  flag: Flag_of_North_Dakota.svg
+- code: us-oh
+  edition: us_states
+  de: Ohio
+  en: Ohio
+  flag: Flag_of_Ohio.svg
+- code: us-ok
+  edition: us_states
+  de: Oklahoma
+  en: Oklahoma
+  flag: Flag_of_Oklahoma.svg
+- code: us-or
+  edition: us_states
+  de: Oregon
+  en: Oregon
+  flag: Flag_of_Oregon.svg
+- code: us-pa
+  edition: us_states
+  de: Pennsylvania
+  en: Pennsylvania
+  aliases_de: [Pennsylvanien]
+  flag: Flag_of_Pennsylvania.svg
+- code: us-ri
+  edition: us_states
+  de: Rhode Island
+  en: Rhode Island
+  flag: Flag_of_Rhode_Island.svg
+- code: us-sc
+  edition: us_states
+  de: South Carolina
+  en: South Carolina
+  aliases_de: [Südkarolina, Sudkarolina]
+  flag: Flag_of_South_Carolina.svg
+- code: us-sd
+  edition: us_states
+  de: South Dakota
+  en: South Dakota
+  aliases_de: [Süddakota, Suddakota]
+  flag: Flag_of_South_Dakota.svg
+- code: us-tn
+  edition: us_states
+  de: Tennessee
+  en: Tennessee
+  flag: Flag_of_Tennessee.svg
+- code: us-tx
+  edition: us_states
+  de: Texas
+  en: Texas
+  flag: Flag_of_Texas.svg
+- code: us-ut
+  edition: us_states
+  de: Utah
+  en: Utah
+  flag: Flag_of_Utah.svg
+- code: us-vt
+  edition: us_states
+  de: Vermont
+  en: Vermont
+  flag: Flag_of_Vermont.svg
+- code: us-va
+  edition: us_states
+  de: Virginia
+  en: Virginia
+  flag: Flag_of_Virginia.svg
+- code: us-wa
+  edition: us_states
+  de: Washington
+  en: Washington
+  flag: Flag_of_Washington.svg
+- code: us-wv
+  edition: us_states
+  de: West Virginia
+  en: West Virginia
+  aliases_de: [Westvirginia]
+  flag: Flag_of_West_Virginia.svg
+- code: us-wi
+  edition: us_states
+  de: Wisconsin
+  en: Wisconsin
+  flag: Flag_of_Wisconsin.svg
+- code: us-wy
+  edition: us_states
+  de: Wyoming
+  en: Wyoming
+  flag: Flag_of_Wyoming.svg
+
+# --- German states (16) ---
+- code: de-bw
+  edition: de_states
+  de: Baden-Württemberg
+  en: Baden-Württemberg
+  aliases_de: [Baden-Wuerttemberg, Baden Württemberg, Baden Wuerttemberg]
+  aliases_en: [Baden-Wuerttemberg, Baden Wurttemberg]
+  flag: Flag_of_Baden-Württemberg_(state,_greater_arms).svg
+- code: de-by
+  edition: de_states
+  de: Bayern
+  en: Bavaria
+  aliases_de: [Freistaat Bayern]
+  aliases_en: [Bayern]
+  flag: Flag_of_Bavaria_(lozengy).svg
+- code: de-be
+  edition: de_states
+  de: Berlin
+  en: Berlin
+  flag: Flag_of_Berlin.svg
+- code: de-bb
+  edition: de_states
+  de: Brandenburg
+  en: Brandenburg
+  flag: Flag_of_Brandenburg.svg
+- code: de-hb
+  edition: de_states
+  de: Bremen
+  en: Bremen
+  flag: Flag_of_Bremen.svg
+- code: de-hh
+  edition: de_states
+  de: Hamburg
+  en: Hamburg
+  flag: Flag_of_Hamburg.svg
+- code: de-he
+  edition: de_states
+  de: Hessen
+  en: Hesse
+  aliases_en: [Hessen]
+  flag: Flag_of_Hesse.svg
+- code: de-mv
+  edition: de_states
+  de: Mecklenburg-Vorpommern
+  en: Mecklenburg-Western Pomerania
+  aliases_de: [Mecklenburg Vorpommern]
+  aliases_en: [Mecklenburg-Vorpommern, Mecklenburg Vorpommern]
+  flag: Flag_of_Mecklenburg-Vorpommern.svg
+- code: de-ni
+  edition: de_states
+  de: Niedersachsen
+  en: Lower Saxony
+  aliases_en: [Niedersachsen]
+  flag: Flag_of_Lower_Saxony.svg
+- code: de-nw
+  edition: de_states
+  de: Nordrhein-Westfalen
+  en: North Rhine-Westphalia
+  aliases_de: [NRW, Nordrhein Westfalen]
+  aliases_en: [Nordrhein-Westfalen, NRW, North Rhine Westphalia]
+  flag: Flag_of_North_Rhine-Westphalia.svg
+- code: de-rp
+  edition: de_states
+  de: Rheinland-Pfalz
+  en: Rhineland-Palatinate
+  aliases_de: [Rheinland Pfalz]
+  aliases_en: [Rheinland-Pfalz, Rhineland Palatinate]
+  flag: Flag_of_Rhineland-Palatinate.svg
+- code: de-sl
+  edition: de_states
+  de: Saarland
+  en: Saarland
+  flag: Flag_of_Saarland.svg
+- code: de-sn
+  edition: de_states
+  de: Sachsen
+  en: Saxony
+  aliases_en: [Sachsen]
+  flag: Flag_of_Saxony.svg
+- code: de-st
+  edition: de_states
+  de: Sachsen-Anhalt
+  en: Saxony-Anhalt
+  aliases_de: [Sachsen Anhalt]
+  aliases_en: [Sachsen-Anhalt, Saxony Anhalt]
+  flag: Flag_of_Saxony-Anhalt.svg
+- code: de-sh
+  edition: de_states
+  de: Schleswig-Holstein
+  en: Schleswig-Holstein
+  aliases_de: [Schleswig Holstein]
+  aliases_en: [Schleswig Holstein]
+  flag: Flag_of_Schleswig-Holstein.svg
+- code: de-th
+  edition: de_states
+  de: Thüringen
+  en: Thuringia
+  aliases_de: [Thueringen]
+  aliases_en: [Thüringen, Thueringen]
+  flag: Flag_of_Thuringia.svg
+
+# --- Swiss cantons (26) ---
+- code: ch-zh
+  edition: ch_cantons
+  de: Zürich
+  en: Zurich
+  aliases_de: [Zuerich, Zurich]
+  aliases_en: [Zürich, Zuerich]
+  flag: Flag_of_Canton_of_Zürich.svg
+- code: ch-be
+  edition: ch_cantons
+  de: Bern
+  en: Bern
+  aliases_en: [Berne]
+  flag: Flag_of_Canton_of_Bern.svg
+- code: ch-lu
+  edition: ch_cantons
+  de: Luzern
+  en: Lucerne
+  aliases_en: [Luzern]
+  flag: Flag_of_Canton_of_Lucerne.svg
+- code: ch-ur
+  edition: ch_cantons
+  de: Uri
+  en: Uri
+  flag: Flag_of_Canton_of_Uri.svg
+- code: ch-sz
+  edition: ch_cantons
+  de: Schwyz
+  en: Schwyz
+  flag: Flag_of_Canton_of_Schwyz.svg
+- code: ch-ow
+  edition: ch_cantons
+  de: Obwalden
+  en: Obwalden
+  flag: Flag_of_Canton_of_Obwalden.svg
+- code: ch-nw
+  edition: ch_cantons
+  de: Nidwalden
+  en: Nidwalden
+  flag: Flag_of_Canton_of_Nidwalden.svg
+- code: ch-gl
+  edition: ch_cantons
+  de: Glarus
+  en: Glarus
+  flag: Flag_of_Canton_of_Glarus.svg
+- code: ch-zg
+  edition: ch_cantons
+  de: Zug
+  en: Zug
+  flag: Flag_of_Canton_of_Zug.svg
+- code: ch-fr
+  edition: ch_cantons
+  de: Freiburg
+  en: Fribourg
+  aliases_en: [Freiburg]
+  flag: Flag_of_Canton_of_Fribourg.svg
+- code: ch-so
+  edition: ch_cantons
+  de: Solothurn
+  en: Solothurn
+  flag: Flag_of_Canton_of_Solothurn.svg
+- code: ch-bs
+  edition: ch_cantons
+  de: Basel-Stadt
+  en: Basel-Stadt
+  aliases_de: [Basel Stadt]
+  aliases_en: [Basel-City, Basel Stadt]
+  flag: Flag_of_Canton_of_Basel-Stadt.svg
+- code: ch-bl
+  edition: ch_cantons
+  de: Basel-Landschaft
+  en: Basel-Landschaft
+  aliases_de: [Basel Landschaft, Baselland]
+  aliases_en: [Basel-Land, Basel Landschaft, Baselland]
+  flag: Flag_of_Canton_of_Basel-Landschaft.svg
+- code: ch-sh
+  edition: ch_cantons
+  de: Schaffhausen
+  en: Schaffhausen
+  flag: Flag_of_Canton_of_Schaffhausen.svg
+- code: ch-ar
+  edition: ch_cantons
+  de: Appenzell Ausserrhoden
+  en: Appenzell Ausserrhoden
+  aliases_de: [Appenzell Außerrhoden, Appenzell Ausserhoden]
+  aliases_en: [Appenzell Outer Rhodes, Appenzell Ausserhoden]
+  flag: Flag_of_Canton_of_Appenzell_Ausserrhoden.svg
+- code: ch-ai
+  edition: ch_cantons
+  de: Appenzell Innerrhoden
+  en: Appenzell Innerrhoden
+  aliases_de: [Appenzell Innerhoden]
+  aliases_en: [Appenzell Inner Rhodes]
+  flag: Flag_of_Canton_of_Appenzell_Innerrhoden.svg
+- code: ch-sg
+  edition: ch_cantons
+  de: St. Gallen
+  en: St. Gallen
+  aliases_de: [Sankt Gallen, St Gallen]
+  aliases_en: [Sankt Gallen, St Gallen, Saint Gallen]
+  flag: Flag_of_Canton_of_St._Gallen.svg
+- code: ch-gr
+  edition: ch_cantons
+  de: Graubünden
+  en: Grisons
+  aliases_de: [Graubuenden, Graubunden]
+  aliases_en: [Graubünden, Graubunden, Grigioni]
+  flag: Flag_of_Canton_of_Graubünden.svg
+- code: ch-ag
+  edition: ch_cantons
+  de: Aargau
+  en: Aargau
+  aliases_en: [Argovia]
+  flag: Flag_of_Canton_of_Aargau.svg
+- code: ch-tg
+  edition: ch_cantons
+  de: Thurgau
+  en: Thurgau
+  flag: Flag_of_Canton_of_Thurgau.svg
+- code: ch-ti
+  edition: ch_cantons
+  de: Tessin
+  en: Ticino
+  aliases_en: [Tessin]
+  flag: Flag_of_Canton_of_Ticino.svg
+- code: ch-vd
+  edition: ch_cantons
+  de: Waadt
+  en: Vaud
+  aliases_en: [Waadt]
+  flag: Flag_of_Canton_of_Vaud.svg
+- code: ch-vs
+  edition: ch_cantons
+  de: Wallis
+  en: Valais
+  aliases_en: [Wallis]
+  flag: Flag_of_Canton_of_Valais.svg
+- code: ch-ne
+  edition: ch_cantons
+  de: Neuenburg
+  en: Neuchâtel
+  aliases_de: [Neuchatel, Neuchâtel]
+  aliases_en: [Neuenburg, Neuchatel]
+  flag: Flag_of_Canton_of_Neuchâtel.svg
+- code: ch-ge
+  edition: ch_cantons
+  de: Genf
+  en: Geneva
+  aliases_de: [Genève, Geneve, Geneva]
+  aliases_en: [Genf, Genève, Geneve]
+  flag: Flag_of_Canton_of_Geneva.svg
+- code: ch-ju
+  edition: ch_cantons
+  de: Jura
+  en: Jura
+  flag: Flag_of_Canton_of_Jura.svg
+
+# --- Italian regions (20) ---
+- code: it-21
+  edition: it_regions
+  de: Piemont
+  en: Piedmont
+  aliases_de: [Piemonte]
+  aliases_en: [Piemonte, Piemont]
+  flag: Flag_of_Piedmont.svg
+- code: it-23
+  edition: it_regions
+  de: Aostatal
+  en: Aosta Valley
+  aliases_de: ["Valle d'Aosta", "Valle d Aosta"]
+  aliases_en: ["Valle d'Aosta", "Valle d Aosta", "Aostatal"]
+  flag: Flag_of_Aosta_Valley.svg
+- code: it-25
+  edition: it_regions
+  de: Lombardei
+  en: Lombardy
+  aliases_de: [Lombardia]
+  aliases_en: [Lombardia, Lombardei]
+  flag: Flag_of_Lombardy.svg
+- code: it-32
+  edition: it_regions
+  de: Trentino-Südtirol
+  en: Trentino-South Tyrol
+  aliases_de: [Trentino-Alto Adige, Trentino Südtirol, Trentino-Suedtirol]
+  aliases_en: [Trentino-Alto Adige, Trentino Alto Adige]
+  flag: Flag_of_Trentino-Alto_Adige.svg
+- code: it-34
+  edition: it_regions
+  de: Venetien
+  en: Veneto
+  aliases_de: [Veneto]
+  aliases_en: [Venetien]
+  flag: Flag_of_Veneto.svg
+- code: it-36
+  edition: it_regions
+  de: Friaul-Julisch Venetien
+  en: Friuli-Venezia Giulia
+  aliases_de: [Friaul, Friuli-Venezia Giulia, Friuli Venezia Giulia]
+  aliases_en: [Friaul-Julisch Venetien, Friuli Venezia Giulia]
+  flag: Flag_of_Friuli-Venezia_Giulia.svg
+- code: it-42
+  edition: it_regions
+  de: Ligurien
+  en: Liguria
+  aliases_de: [Liguria]
+  aliases_en: [Ligurien]
+  flag: Flag_of_Liguria.svg
+- code: it-45
+  edition: it_regions
+  de: Emilia-Romagna
+  en: Emilia-Romagna
+  aliases_de: [Emilia Romagna]
+  aliases_en: [Emilia Romagna]
+  flag: Flag_of_Emilia-Romagna.svg
+- code: it-52
+  edition: it_regions
+  de: Toskana
+  en: Tuscany
+  aliases_de: [Toscana]
+  aliases_en: [Toscana, Toskana]
+  flag: Flag_of_Tuscany.svg
+- code: it-55
+  edition: it_regions
+  de: Umbrien
+  en: Umbria
+  aliases_de: [Umbria]
+  aliases_en: [Umbrien]
+  flag: Flag_of_Umbria.svg
+- code: it-57
+  edition: it_regions
+  de: Marken
+  en: Marche
+  aliases_de: [Marche]
+  aliases_en: [Marken]
+  flag: Flag_of_Marche.svg
+- code: it-62
+  edition: it_regions
+  de: Latium
+  en: Lazio
+  aliases_de: [Lazio]
+  aliases_en: [Latium]
+  flag: Flag_of_Lazio.svg
+- code: it-65
+  edition: it_regions
+  de: Abruzzen
+  en: Abruzzo
+  aliases_de: [Abruzzo, Abruzzi]
+  aliases_en: [Abruzzen, Abruzzi]
+  flag: Flag_of_Abruzzo.svg
+- code: it-67
+  edition: it_regions
+  de: Molise
+  en: Molise
+  flag: Flag_of_Molise.svg
+- code: it-72
+  edition: it_regions
+  de: Kampanien
+  en: Campania
+  aliases_de: [Campania]
+  aliases_en: [Kampanien]
+  flag: Flag_of_Campania.svg
+- code: it-75
+  edition: it_regions
+  de: Apulien
+  en: Apulia
+  aliases_de: [Puglia]
+  aliases_en: [Puglia, Apulien]
+  flag: Flag_of_Apulia.svg
+- code: it-77
+  edition: it_regions
+  de: Basilicata
+  en: Basilicata
+  aliases_de: [Lukanien]
+  flag: Flag_of_Basilicata.svg
+- code: it-78
+  edition: it_regions
+  de: Kalabrien
+  en: Calabria
+  aliases_de: [Calabria]
+  aliases_en: [Kalabrien]
+  flag: Flag_of_Calabria.svg
+- code: it-82
+  edition: it_regions
+  de: Sizilien
+  en: Sicily
+  aliases_de: [Sicilia, Sizilien]
+  aliases_en: [Sicilia, Sizilien]
+  flag: Flag_of_Sicily.svg
+- code: it-88
+  edition: it_regions
+  de: Sardinien
+  en: Sardinia
+  aliases_de: [Sardegna]
+  aliases_en: [Sardegna, Sardinien]
+  flag: Flag_of_Sardinia.svg

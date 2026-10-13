@@ -1,0 +1,11 @@
+<li class="asset-gallery-cell">
+  <div class="asset-gallery-shape">
+    <%= shape_svg(entry, fixed_frame: true) %>
+  </div>
+  <div class="asset-gallery-flag">
+    <%= flag_svg(entry, css_class: "asset-gallery-flag-img") %>
+  </div>
+  <p class="asset-gallery-label">
+    <span class="asset-gallery-name" title="<%= entry.display_name %>"><%= entry.display_name %></span>
+  </p>
+</li>
