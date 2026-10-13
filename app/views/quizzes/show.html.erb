@@ -1,3 +1,8 @@
+<% if @next_country %>
+  <% content_for :head do %>
+    <%= tag.link rel: "preload", as: "image", href: image_path(@next_country.flag_path) %>
+  <% end %>
+<% end %>
 <div class="geo-quiz flex flex-col flex-1 min-h-0 justify-start gap-2" data-turbo-temporary>
   <div class="flex items-center justify-between gap-2 shrink-0">
     <div class="flex items-center gap-2 flex-wrap">

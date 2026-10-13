@@ -22,6 +22,7 @@ class QuizzesController < ApplicationController
     @round = session[:quiz_round]
     @score = session[:quiz_score]
     @total = ROUNDS_PER_GAME
+    @next_country = queue_next_flag
     @last_result = session.delete(:last_result)
     @last_answer = session.delete(:last_answer)
     @last_guess_name = session.delete(:last_guess_name)
@@ -177,6 +178,7 @@ class QuizzesController < ApplicationController
     session[:quiz_round] = 1
     session[:quiz_score] = 0
     session[:current_country_id] = nil
+    session[:queued_country_id] = nil
     session[:seen_ids] = []
     session.delete(:last_result)
     session.delete(:last_answer)
@@ -184,14 +186,40 @@ class QuizzesController < ApplicationController
   end
 
   def pick_next_subject
-    if session[:current_country_id]
-      subject = find_subject(session[:current_country_id])
-      return subject if subject
+    if (subject = find_subject(session[:current_country_id]))
+      return subject
     end
 
+    queued_id = session.delete(:queued_country_id)
+    if (subject = find_subject(queued_id))
+      return subject
+    end
+
+    draw_unseen_subject
+  end
+
+  # Chosen while the current flag is on screen, so the browser can fetch it
+  # before the next round replaces the image.
+  def queue_next_flag
+    return unless @mode == "flag"
+    return if @country.nil? || session[:quiz_round].to_i >= ROUNDS_PER_GAME
+
+    if (queued = find_subject(session[:queued_country_id]))
+      return queued
+    end
+
+    subject = draw_unseen_subject(exclude_ids: [@country.id])
+    session[:queued_country_id] = subject&.id
+    subject
+  end
+
+  def draw_unseen_subject(exclude_ids: [])
     seen = Array(session[:seen_ids])
     pool = subject_scope.where.not(id: seen)
-    pool = subject_scope if pool.none?
+    if pool.none?
+      pool = subject_scope.where.not(id: exclude_ids)
+      pool = subject_scope if pool.none?
+    end
     subject = pool.order("RANDOM()").first
     return nil unless subject
 
