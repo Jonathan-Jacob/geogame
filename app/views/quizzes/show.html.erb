@@ -1,4 +1,4 @@
-<% if @next_country %>
+<% if @mode == "flag" && @next_country %>
   <% content_for :head do %>
     <%= tag.link rel: "preload", as: "image", href: image_path(@next_country.flag_path) %>
   <% end %>

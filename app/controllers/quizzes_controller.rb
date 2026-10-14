@@ -11,6 +11,10 @@ class QuizzesController < ApplicationController
   def show
     if prefetch_request?
       assign_saved_quiz
+      # A prefetch of this URL can land in the gap after a guess, when the
+      # round has moved on and no subject is stored yet. Do not let Turbo
+      # keep that empty page. The image preload on a real response is separate.
+      head :no_content if !@finished && @country.nil?
       return
     end
 
@@ -29,7 +33,7 @@ class QuizzesController < ApplicationController
     @round = session[:quiz_round]
     @score = session[:quiz_score]
     @total = ROUNDS_PER_GAME
-    @next_country = queue_next_flag
+    @next_country = queue_next_subject
     @last_result = session.delete(:last_result)
     @last_answer = session.delete(:last_answer)
     @last_guess_name = session.delete(:last_guess_name)
@@ -63,16 +67,7 @@ class QuizzesController < ApplicationController
       session[:last_result] = "wrong"
     end
     session[:last_answer] = country.display_name(I18n.locale)
-    session[:quiz_round] = session[:quiz_round].to_i + 1
-    session[:current_country_id] = nil
-
-    if session[:quiz_round] > ROUNDS_PER_GAME
-      finish_game!(country)
-    else
-      remember_progress
-    end
-
-    redirect_to quiz_path(quiz_link_params)
+    advance_round!(country)
   end
 
   def skip
@@ -84,16 +79,7 @@ class QuizzesController < ApplicationController
     country = find_subject(session[:current_country_id])
     session[:last_result] = "skipped"
     session[:last_answer] = country&.display_name(I18n.locale)
-    session[:quiz_round] = session[:quiz_round].to_i + 1
-    session[:current_country_id] = nil
-
-    if session[:quiz_round] > ROUNDS_PER_GAME
-      finish_game!(country)
-    else
-      remember_progress
-    end
-
-    redirect_to quiz_path(quiz_link_params)
+    advance_round!(country)
   end
 
   def reset
@@ -216,6 +202,7 @@ class QuizzesController < ApplicationController
       @last_result = session[:last_result]
       @last_answer = session[:last_answer]
       @last_guess_name = session[:last_guess_name]
+      @next_country = find_subject(session[:queued_country_id]) if @mode == "flag" && @country
     else
       @country = nil
       @round = 1
@@ -258,6 +245,28 @@ class QuizzesController < ApplicationController
     session[:seen_ids] = saved["seen_ids"]
   end
 
+  # The next subject is chosen while this round is on screen. Guess and skip
+  # promote it before the redirect, so the session never stores a round with
+  # no subject. Flag mode also preloads that subject's image.
+  def advance_round!(answered)
+    session[:quiz_round] = session[:quiz_round].to_i + 1
+
+    if session[:quiz_round] > ROUNDS_PER_GAME
+      finish_game!(answered)
+    else
+      promote_queued_subject(answered)
+      remember_progress
+    end
+
+    redirect_to quiz_path(quiz_link_params)
+  end
+
+  def promote_queued_subject(answered)
+    queued_id = session.delete(:queued_country_id)
+    subject = find_subject(queued_id) || draw_unseen_subject(exclude_ids: [answered&.id].compact)
+    session[:current_country_id] = subject&.id
+  end
+
   def pick_next_subject
     if (subject = find_subject(session[:current_country_id]))
       return subject
@@ -271,10 +280,9 @@ class QuizzesController < ApplicationController
     draw_unseen_subject
   end
 
-  # Chosen while the current flag is on screen, so the browser can fetch it
-  # before the next round replaces the image.
-  def queue_next_flag
-    return unless @mode == "flag"
+  # Chosen while the current round is on screen. Flag mode preloads the image;
+  # both modes need the id so the next request can render a subject immediately.
+  def queue_next_subject
     return if @country.nil? || session[:quiz_round].to_i >= ROUNDS_PER_GAME
 
     if (queued = find_subject(session[:queued_country_id]))
